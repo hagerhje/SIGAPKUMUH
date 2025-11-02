@@ -16,82 +16,142 @@
         <link rel="stylesheet" href="css/leaflet.photon.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
-/* Aturan untuk Header Kustom */
-#custom-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 65px; /* Ketinggian header */
-    background-color: #1f3f6e; /* Warna biru tua */
-    color: white;
-    z-index: 10000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-
-    /* Menggunakan Flexbox untuk penataan item */
-    display: flex;
-    align-items: center; /* Pusatkan item secara vertikal */
-    padding: 0 15px;
-}
-
-/* Aturan untuk Logo */
-#header-logo {
-    height: 50px; /* Tinggi logo */
-    width: auto;
-    margin-right: 15px; /* Jarak antara logo dan judul */
-}
-
-/* Aturan untuk Judul */
-#header-title h1 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-#header-title p {
-    margin: 0;
-    font-size: 12px;
-}
-
-/* Menggeser Peta ke Bawah agar tidak tertutup Header */
-#map {
-    top: 65px !important; /* Geser peta ke bawah sebesar tinggi header */
-    height: calc(100% - 65px) !important; /* Sesuaikan tinggi peta */
-}
-
         html, body, #map {
             width: 100%;
             height: 100%;
             padding: 0;
             margin: 0;
         }
-/* Terapkan font ke seluruh halaman */
+        
+/* --- Added header styling (no changes to map logic) --- */
+:root {
+  --header-h: 56px;
+  --header-bg: #002B5B;
+  --header-border: rgba(0,0,0,0.08);
+  --header-text: #ffffff; /* slate-900 */
+}
 body {
-    font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+.site-header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background: var(--header-bg);
+  backdrop-filter: saturate(180%) blur(8px);
+  -webkit-backdrop-filter: saturate(180%) blur(8px);
+  border-bottom: 1px solid var(--header-border);
+  z-index: 1000; /* above Leaflet controls */
+}
+.site-header__title{
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: var(--header-text);
+  font-size: 16px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* push map below header */
+#map{
+  height: calc(100% - 72px) !important;
+  margin-top: 72px !important;
 }
 
-/* Modifikasi juga elemen di header agar mengikuti font baru */
-#custom-header h1, #custom-header p {
-    font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+
+/* --- On-load popup modal --- */
+.modal-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none; /* default hidden, shown on load via JS */
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
 }
-        </style>
-        <title>SIGAP KUMUH (Sistem Informasi Geografis Aksi Penanganan Kumuh) Kabupaten Lamongan</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">    
-</head>
+.modal{
+  width: min(640px, calc(100% - 32px));
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.25);
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+.modal__header{
+  background: #002B5B; /* match header blue */
+  color: #ffffff;
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: 16px;
+}
+.modal__body{
+  padding: 16px 18px;
+  color: #0f172a;
+  line-height: 1.55;
+  font-size: 14px;
+}
+.modal__footer{
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 18px 16px;
+}
+.modal__btn{
+  appearance: none;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.modal__btn--primary{
+  background: #002B5B;
+  color: #ffffff;
+}
+.modal__btn--ghost{
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+</style>
+        <title></title>
+            <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    </head>
     <body>
-        <div id="custom-header">
-        <img id="header-logo" src="https://github.com/BidangPKP/SIGAPKUMUH/blob/main/images/Lambang_Kabupaten_Lamongan.png">
-        <div id="header-title">
-        <h1>SIGAP KUMUH</h1>
-        <p>Sistem Informasi Geografis Aksi Penanganan Kumuh di Kabupaten Lamongan</p>
-        </div>
-        </div>
+<header class="site-header" role="banner" aria-label="Site header">
+  <div style="display:flex;flex-direction:column;">
+      <div class="site-header__title" style="font-size:18px;font-weight:700;margin-bottom:4px;">SIGAP KUMUH</div>
+      <div class="site-header__title" style="font-size:13px;font-weight:400;opacity:0.8;margin-top:2px;">Sistem Informasi Geografis Aksi Penanganan Kumuh Kabupaten Lamongan</div>
+  </div>
+</header>
+
+<!-- On-load popup modal -->
+<div class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" id="onload-modal">
+  <div class="modal" tabindex="-1">
+    <div class="modal__header" id="modal-title">Selamat datang di SIGAP KUMUH</div>
+    <div class="modal__body" id="modal-desc">
+      <p><strong>SIGAP KUMUH</strong> (Sistem Informasi Geografis Aksi Penanganan Kumuh Kabupaten Lamongan) menampilkan peta tematik, data aksi penanganan, dan fitur pencarian/pelaporan.</p>
+      <p>Gunakan kontrol peta untuk menyalakan/mematikan layer, melakukan pencarian lokasi, dan melihat detail melalui pop-up.</p>
+    </div>
+    <div class="modal__footer">
+      <button class="modal__btn modal__btn--ghost" id="modal-close-secondary" type="button">Tutup</button>
+      <button class="modal__btn modal__btn--primary" id="modal-close" type="button" aria-label="Tutup dialog">Mengerti</button>
+    </div>
+  </div>
+</div>
+
+
         <div id="map">
         </div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
         <script src="js/L.Control.Layers.Tree.min.js"></script>
-        <script src="js/leaflet-svg-shape-markers.min.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
         <script src="js/leaflet-hash.js"></script>
@@ -105,17 +165,16 @@ body {
         <script src="js/leaflet-search.js"></script>
         <script src="data/BatasAdministrasiKecamatan_1.js"></script>
         <script src="data/BatasAdministrasiDesa_2.js"></script>
-        <script src="data/SKKumuh2020_3.js"></script>
-        <script src="data/SKKumuh2025_4.js"></script>
-        <script src="data/PekerjaanCiptaKarya2025_5.js"></script>
-        <script src="data/PekerjaanPSU2024_6.js"></script>
-        <script src="data/PekerjaanPSU2025_7.js"></script>
-        <script src="data/PekerjaanPermukiman2025_8.js"></script>
-        <script src="data/RencanaPekerjaanPermukiman2026_9.js"></script>
+        <script src="data/PekerjaanCiptaKarya2025_3.js"></script>
+        <script src="data/SKKumuh2020_4.js"></script>
+        <script src="data/SKKumuh2025_5.js"></script>
+        <script src="data/PekerjaanPKP2024_6.js"></script>
+        <script src="data/PekerjaanPKP2025_7.js"></script>
+        <script src="data/RencanaPekerjaanPKP2026_8.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[-7.007904402925648,112.3643183449685],[-6.977338524801562,112.41470110074303]]);
+        }).fitBounds([[-7.165251989218539,112.35059978669625],[-7.132664935225896,112.40431411402744]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -180,31 +239,6 @@ body {
                 popup._contentNode.classList.remove('media');
             }
         }
-        var title = new L.Control({'position':'topleft'});
-        title.onAdd = function (map) {
-            this._div = L.DomUtil.create('div', 'info');
-            this.update();
-            return this._div;
-        };
-        title.update = function () {
-            this._div.innerHTML = '<h2>SIGAP KUMUH (Sistem Informasi Geografis Aksi Penanganan Kumuh) Kabupaten Lamongan</h2>';
-        };
-        title.addTo(map);
-        var abstract = new L.Control({'position':'topleft'});
-        abstract.onAdd = function (map) {
-            this._div = L.DomUtil.create('div',
-            'leaflet-control abstract');
-            this._div.id = 'abstract'
-
-                abstract.show();
-                return this._div;
-            };
-            abstract.show = function () {
-                this._div.classList.remove("abstract");
-                this._div.classList.add("abstractUncollapsed");
-                this._div.innerHTML = 'SIGAP KUMUH (Sistem Informasi Geografis Aksi Penanganan Kumuh) Kabupaten Lamongan';
-        };
-        abstract.addTo(map);
         var zoomControl = L.control.zoom({
             position: 'topleft'
         }).addTo(map);
@@ -265,14 +299,14 @@ body {
                     return {
                 pane: 'pane_BatasAdministrasiKecamatan_1',
                 opacity: 1,
-                color: 'rgba(153,80,119,0.5)',
+                color: 'rgba(0,0,0,0.5)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0, 
+                weight: 1, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(0,255,53,0.5)',
+                fillColor: 'rgba(255,137,0,0.37450980392156863)',
                 interactive: false,
             }
                     break;
@@ -284,25 +318,10 @@ body {
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0, 
+                weight: 1, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(196,196,196,0.5)',
-                interactive: false,
-            }
-                    break;
-                default:
-                    return {
-                pane: 'pane_BatasAdministrasiKecamatan_1',
-                opacity: 1,
-                color: 'rgba(35,35,35,0.5)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(205,55,98,0.5)',
+                fillColor: 'rgba(196,196,196,0.26862745098039215)',
                 interactive: false,
             }
                     break;
@@ -379,7 +398,83 @@ body {
         });
         bounds_group.addLayer(layer_BatasAdministrasiDesa_2);
         map.addLayer(layer_BatasAdministrasiDesa_2);
-        function pop_SKKumuh2020_3(feature, layer) {
+        function pop_PekerjaanCiptaKarya2025_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">No SPK</th>\
+                        <td class="visible-with-data" id="No SPK">' + (feature.properties['No SPK'] !== null ? autolinker.link(String(feature.properties['No SPK']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama Proye</th>\
+                        <td class="visible-with-data" id="Nama Proye">' + (feature.properties['Nama Proye'] !== null ? autolinker.link(String(feature.properties['Nama Proye']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Pelaksana</th>\
+                        <td class="visible-with-data" id="Pelaksana">' + (feature.properties['Pelaksana'] !== null ? autolinker.link(String(feature.properties['Pelaksana']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nilai Kont</th>\
+                        <td class="visible-with-data" id="Nilai Kont">' + (feature.properties['Nilai Kont'] !== null ? autolinker.link(String(feature.properties['Nilai Kont']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Mulai</th>\
+                        <td>' + (feature.properties['Mulai'] !== null ? autolinker.link(String(feature.properties['Mulai']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Berakhir</th>\
+                        <td>' + (feature.properties['Berakhir'] !== null ? autolinker.link(String(feature.properties['Berakhir']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Progress</th>\
+                        <td class="visible-with-data" id="Progress">' + (feature.properties['Progress'] !== null ? autolinker.link(String(feature.properties['Progress']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Sebelum" colspan="2"><strong>Sebelum</strong><br />' + (feature.properties['Sebelum'] !== null ? '<img src="images/' + String(feature.properties['Sebelum']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Sesudah" colspan="2"><strong>Sesudah</strong><br />' + (feature.properties['Sesudah'] !== null ? '<img src="images/' + String(feature.properties['Sesudah']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        var pattern_PekerjaanCiptaKarya2025_3_0 = new L.StripePattern({
+            weight: 1.0,
+            spaceWeight: 2.0,
+            color: '#ffe900',
+            opacity: 1.0,
+            spaceOpacity: 0,
+            angle: 315
+        });
+        pattern_PekerjaanCiptaKarya2025_3_0.addTo(map);
+        function style_PekerjaanCiptaKarya2025_3_0() {
+            return {
+                pane: 'pane_PekerjaanCiptaKarya2025_3',
+                stroke: false,
+                fillOpacity: 1,
+                fillPattern: pattern_PekerjaanCiptaKarya2025_3_0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PekerjaanCiptaKarya2025_3');
+        map.getPane('pane_PekerjaanCiptaKarya2025_3').style.zIndex = 403;
+        map.getPane('pane_PekerjaanCiptaKarya2025_3').style['mix-blend-mode'] = 'normal';
+        var layer_PekerjaanCiptaKarya2025_3 = new L.geoJson(json_PekerjaanCiptaKarya2025_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PekerjaanCiptaKarya2025_3',
+            layerName: 'layer_PekerjaanCiptaKarya2025_3',
+            pane: 'pane_PekerjaanCiptaKarya2025_3',
+            onEachFeature: pop_PekerjaanCiptaKarya2025_3,
+            style: style_PekerjaanCiptaKarya2025_3_0,
+        });
+        bounds_group.addLayer(layer_PekerjaanCiptaKarya2025_3);
+        map.addLayer(layer_PekerjaanCiptaKarya2025_3);
+        function pop_SKKumuh2020_4(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">Sumber</th>\
@@ -429,9 +524,9 @@ body {
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_SKKumuh2020_3_0() {
+        function style_SKKumuh2020_4_0() {
             return {
-                pane: 'pane_SKKumuh2020_3',
+                pane: 'pane_SKKumuh2020_4',
                 opacity: 1,
                 color: 'rgba(196,196,196,0.7)',
                 dashArray: '',
@@ -444,21 +539,21 @@ body {
                 interactive: true,
             }
         }
-        map.createPane('pane_SKKumuh2020_3');
-        map.getPane('pane_SKKumuh2020_3').style.zIndex = 403;
-        map.getPane('pane_SKKumuh2020_3').style['mix-blend-mode'] = 'normal';
-        var layer_SKKumuh2020_3 = new L.geoJson(json_SKKumuh2020_3, {
+        map.createPane('pane_SKKumuh2020_4');
+        map.getPane('pane_SKKumuh2020_4').style.zIndex = 404;
+        map.getPane('pane_SKKumuh2020_4').style['mix-blend-mode'] = 'normal';
+        var layer_SKKumuh2020_4 = new L.geoJson(json_SKKumuh2020_4, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_SKKumuh2020_3',
-            layerName: 'layer_SKKumuh2020_3',
-            pane: 'pane_SKKumuh2020_3',
-            onEachFeature: pop_SKKumuh2020_3,
-            style: style_SKKumuh2020_3_0,
+            dataVar: 'json_SKKumuh2020_4',
+            layerName: 'layer_SKKumuh2020_4',
+            pane: 'pane_SKKumuh2020_4',
+            onEachFeature: pop_SKKumuh2020_4,
+            style: style_SKKumuh2020_4_0,
         });
-        bounds_group.addLayer(layer_SKKumuh2020_3);
-        map.addLayer(layer_SKKumuh2020_3);
-        function pop_SKKumuh2025_4(feature, layer) {
+        bounds_group.addLayer(layer_SKKumuh2020_4);
+        map.addLayer(layer_SKKumuh2020_4);
+        function pop_SKKumuh2025_5(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">Sumber</th>\
@@ -512,70 +607,164 @@ body {
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_SKKumuh2025_4_0() {
+        function style_SKKumuh2025_5_0() {
             return {
-                pane: 'pane_SKKumuh2025_4',
+                pane: 'pane_SKKumuh2025_5',
                 opacity: 1,
-                color: 'rgba(128,14,16,0.4)',
+                color: 'rgba(128,14,16,1.0)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(255,0,3,0.4)',
+                fillColor: 'rgba(255,0,3,1.0)',
                 interactive: true,
             }
         }
-        map.createPane('pane_SKKumuh2025_4');
-        map.getPane('pane_SKKumuh2025_4').style.zIndex = 404;
-        map.getPane('pane_SKKumuh2025_4').style['mix-blend-mode'] = 'normal';
-        var layer_SKKumuh2025_4 = new L.geoJson(json_SKKumuh2025_4, {
+        map.createPane('pane_SKKumuh2025_5');
+        map.getPane('pane_SKKumuh2025_5').style.zIndex = 405;
+        map.getPane('pane_SKKumuh2025_5').style['mix-blend-mode'] = 'normal';
+        var layer_SKKumuh2025_5 = new L.geoJson(json_SKKumuh2025_5, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_SKKumuh2025_4',
-            layerName: 'layer_SKKumuh2025_4',
-            pane: 'pane_SKKumuh2025_4',
-            onEachFeature: pop_SKKumuh2025_4,
-            style: style_SKKumuh2025_4_0,
+            dataVar: 'json_SKKumuh2025_5',
+            layerName: 'layer_SKKumuh2025_5',
+            pane: 'pane_SKKumuh2025_5',
+            onEachFeature: pop_SKKumuh2025_5,
+            style: style_SKKumuh2025_5_0,
         });
-        bounds_group.addLayer(layer_SKKumuh2025_4);
-        map.addLayer(layer_SKKumuh2025_4);
-        function pop_PekerjaanCiptaKarya2025_5(feature, layer) {
+        bounds_group.addLayer(layer_SKKumuh2025_5);
+        map.addLayer(layer_SKKumuh2025_5);
+        function pop_PekerjaanPKP2024_6(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">No SPK</th>\
+                        <td>' + (feature.properties['No SPK'] !== null ? autolinker.link(String(feature.properties['No SPK']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Nama Kegia</th>\
+                        <td>' + (feature.properties['Nama Kegia'] !== null ? autolinker.link(String(feature.properties['Nama Kegia']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis</th>\
+                        <td>' + (feature.properties['Jenis'] !== null ? autolinker.link(String(feature.properties['Jenis']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Pekerjaan</th>\
+                        <td>' + (feature.properties['Pekerjaan'] !== null ? autolinker.link(String(feature.properties['Pekerjaan']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Dana</th>\
+                        <td>' + (feature.properties['Dana'] !== null ? autolinker.link(String(feature.properties['Dana']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Dusun</th>\
+                        <td>' + (feature.properties['Dusun'] !== null ? autolinker.link(String(feature.properties['Dusun']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Desa/Kelur</th>\
+                        <td>' + (feature.properties['Desa/Kelur'] !== null ? autolinker.link(String(feature.properties['Desa/Kelur']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kecamatan</th>\
+                        <td>' + (feature.properties['Kecamatan'] !== null ? autolinker.link(String(feature.properties['Kecamatan']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Progress</th>\
+                        <td>' + (feature.properties['Progress'] !== null ? autolinker.link(String(feature.properties['Progress']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Sebelum" colspan="2"><strong>Sebelum</strong><br />' + (feature.properties['Sebelum'] !== null ? '<img src="images/' + String(feature.properties['Sebelum']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Sesudah" colspan="2"><strong>Sesudah</strong><br />' + (feature.properties['Sesudah'] !== null ? '<img src="images/' + String(feature.properties['Sesudah']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_PekerjaanPKP2024_6_0() {
+            return {
+                pane: 'pane_PekerjaanPKP2024_6',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/PekerjaanPKP2024_6.svg',
+            iconSize: [38.0, 38.0]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PekerjaanPKP2024_6');
+        map.getPane('pane_PekerjaanPKP2024_6').style.zIndex = 406;
+        map.getPane('pane_PekerjaanPKP2024_6').style['mix-blend-mode'] = 'normal';
+        var layer_PekerjaanPKP2024_6 = new L.geoJson(json_PekerjaanPKP2024_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PekerjaanPKP2024_6',
+            layerName: 'layer_PekerjaanPKP2024_6',
+            pane: 'pane_PekerjaanPKP2024_6',
+            onEachFeature: pop_PekerjaanPKP2024_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_PekerjaanPKP2024_6_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_PekerjaanPKP2024_6);
+        map.addLayer(layer_PekerjaanPKP2024_6);
+        function pop_PekerjaanPKP2025_7(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">No SPK</th>\
                         <td class="visible-with-data" id="No SPK">' + (feature.properties['No SPK'] !== null ? autolinker.link(String(feature.properties['No SPK']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Nama Proye</th>\
-                        <td class="visible-with-data" id="Nama Proye">' + (feature.properties['Nama Proye'] !== null ? autolinker.link(String(feature.properties['Nama Proye']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <th scope="row">Nama Kegia</th>\
+                        <td class="visible-with-data" id="Nama Kegia">' + (feature.properties['Nama Kegia'] !== null ? autolinker.link(String(feature.properties['Nama Kegia']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Pelaksana</th>\
-                        <td class="visible-with-data" id="Pelaksana">' + (feature.properties['Pelaksana'] !== null ? autolinker.link(String(feature.properties['Pelaksana']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <th scope="row">Jenis</th>\
+                        <td class="visible-with-data" id="Jenis">' + (feature.properties['Jenis'] !== null ? autolinker.link(String(feature.properties['Jenis']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Nilai Kont</th>\
-                        <td class="visible-with-data" id="Nilai Kont">' + (feature.properties['Nilai Kont'] !== null ? autolinker.link(String(feature.properties['Nilai Kont']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <th scope="row">Pekerjaan</th>\
+                        <td class="visible-with-data" id="Pekerjaan">' + (feature.properties['Pekerjaan'] !== null ? autolinker.link(String(feature.properties['Pekerjaan']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Mulai</th>\
-                        <td>' + (feature.properties['Mulai'] !== null ? autolinker.link(String(feature.properties['Mulai']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <th scope="row">Dana</th>\
+                        <td class="visible-with-data" id="Dana">' + (feature.properties['Dana'] !== null ? autolinker.link(String(feature.properties['Dana']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Berakhir</th>\
-                        <td>' + (feature.properties['Berakhir'] !== null ? autolinker.link(String(feature.properties['Berakhir']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <th scope="row">Dusun</th>\
+                        <td class="visible-with-data" id="Dusun">' + (feature.properties['Dusun'] !== null ? autolinker.link(String(feature.properties['Dusun']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Desa/Kelur</th>\
+                        <td class="visible-with-data" id="Desa/Kelur">' + (feature.properties['Desa/Kelur'] !== null ? autolinker.link(String(feature.properties['Desa/Kelur']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kecamatan</th>\
+                        <td class="visible-with-data" id="Kecamatan">' + (feature.properties['Kecamatan'] !== null ? autolinker.link(String(feature.properties['Kecamatan']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Progress</th>\
                         <td class="visible-with-data" id="Progress">' + (feature.properties['Progress'] !== null ? autolinker.link(String(feature.properties['Progress']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td class="visible-with-data" id="Sebelum" colspan="2"><strong>Sebelum</strong><br />' + (feature.properties['Sebelum'] !== null ? '<img src="images/' + String(feature.properties['Sebelum']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
+                        <th scope="row">Sebelum</th>\
+                        <td class="visible-with-data" id="Sebelum">' + (feature.properties['Sebelum'] !== null ? '<img src="images/' + String(feature.properties['Sebelum']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td class="visible-with-data" id="Sesudah" colspan="2"><strong>Sesudah</strong><br />' + (feature.properties['Sesudah'] !== null ? '<img src="images/' + String(feature.properties['Sesudah']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
+                        <th scope="row">Sesudah</th>\
+                        <td class="visible-with-data" id="Sesudah">' + (feature.properties['Sesudah'] !== null ? '<img src="images/' + String(feature.properties['Sesudah']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -585,313 +774,43 @@ body {
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        var pattern_PekerjaanCiptaKarya2025_5_0 = new L.StripePattern({
-            weight: 0.2,
-            spaceWeight: 2.0,
-            color: '#ffe900',
-            opacity: 1.0,
-            spaceOpacity: 0,
-            angle: 315
-        });
-        pattern_PekerjaanCiptaKarya2025_5_0.addTo(map);
-        function style_PekerjaanCiptaKarya2025_5_0() {
+        function style_PekerjaanPKP2025_7_0() {
             return {
-                pane: 'pane_PekerjaanCiptaKarya2025_5',
-                stroke: false,
-                fillOpacity: 1,
-                fillPattern: pattern_PekerjaanCiptaKarya2025_5_0,
+                pane: 'pane_PekerjaanPKP2025_7',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/PekerjaanPKP2025_7.svg',
+            iconSize: [38.0, 38.0]
+        }),
                 interactive: true,
             }
         }
-        map.createPane('pane_PekerjaanCiptaKarya2025_5');
-        map.getPane('pane_PekerjaanCiptaKarya2025_5').style.zIndex = 405;
-        map.getPane('pane_PekerjaanCiptaKarya2025_5').style['mix-blend-mode'] = 'normal';
-        var layer_PekerjaanCiptaKarya2025_5 = new L.geoJson(json_PekerjaanCiptaKarya2025_5, {
+        map.createPane('pane_PekerjaanPKP2025_7');
+        map.getPane('pane_PekerjaanPKP2025_7').style.zIndex = 407;
+        map.getPane('pane_PekerjaanPKP2025_7').style['mix-blend-mode'] = 'normal';
+        var layer_PekerjaanPKP2025_7 = new L.geoJson(json_PekerjaanPKP2025_7, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_PekerjaanCiptaKarya2025_5',
-            layerName: 'layer_PekerjaanCiptaKarya2025_5',
-            pane: 'pane_PekerjaanCiptaKarya2025_5',
-            onEachFeature: pop_PekerjaanCiptaKarya2025_5,
-            style: style_PekerjaanCiptaKarya2025_5_0,
-        });
-        bounds_group.addLayer(layer_PekerjaanCiptaKarya2025_5);
-        map.addLayer(layer_PekerjaanCiptaKarya2025_5);
-        function pop_PekerjaanPSU2024_6(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">No SPK</th>\
-                        <td>' + (feature.properties['No SPK'] !== null ? autolinker.link(String(feature.properties['No SPK']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Nama Kegia</th>\
-                        <td>' + (feature.properties['Nama Kegia'] !== null ? autolinker.link(String(feature.properties['Nama Kegia']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Jenis</th>\
-                        <td>' + (feature.properties['Jenis'] !== null ? autolinker.link(String(feature.properties['Jenis']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Pekerjaan</th>\
-                        <td>' + (feature.properties['Pekerjaan'] !== null ? autolinker.link(String(feature.properties['Pekerjaan']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Dana</th>\
-                        <td>' + (feature.properties['Dana'] !== null ? autolinker.link(String(feature.properties['Dana']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Dusun</th>\
-                        <td>' + (feature.properties['Dusun'] !== null ? autolinker.link(String(feature.properties['Dusun']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Desa/Kelur</th>\
-                        <td>' + (feature.properties['Desa/Kelur'] !== null ? autolinker.link(String(feature.properties['Desa/Kelur']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Kecamatan</th>\
-                        <td>' + (feature.properties['Kecamatan'] !== null ? autolinker.link(String(feature.properties['Kecamatan']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Progress</th>\
-                        <td>' + (feature.properties['Progress'] !== null ? autolinker.link(String(feature.properties['Progress']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td class="visible-with-data" id="Sebelum" colspan="2"><strong>Sebelum</strong><br />' + (feature.properties['Sebelum'] !== null ? '<img src="images/' + String(feature.properties['Sebelum']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td class="visible-with-data" id="Sesudah" colspan="2"><strong>Sesudah</strong><br />' + (feature.properties['Sesudah'] !== null ? '<img src="images/' + String(feature.properties['Sesudah']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
-                    </tr>\
-                </table>';
-            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-			layer.on('popupopen', function(e) {
-				addClassToPopupIfMedia(content, e.popup);
-			});
-			layer.bindPopup(content, { maxHeight: 400 });
-        }
-
-        function style_PekerjaanPSU2024_6_0() {
-            return {
-                pane: 'pane_PekerjaanPSU2024_6',
-                shape: 'triangle',
-                radius: 4.0,
-                opacity: 1,
-                color: 'rgba(50,87,128,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 2.0,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(13,8,135,1.0)',
-                interactive: true,
-            }
-        }
-        map.createPane('pane_PekerjaanPSU2024_6');
-        map.getPane('pane_PekerjaanPSU2024_6').style.zIndex = 406;
-        map.getPane('pane_PekerjaanPSU2024_6').style['mix-blend-mode'] = 'normal';
-        var layer_PekerjaanPSU2024_6 = new L.geoJson(json_PekerjaanPSU2024_6, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_PekerjaanPSU2024_6',
-            layerName: 'layer_PekerjaanPSU2024_6',
-            pane: 'pane_PekerjaanPSU2024_6',
-            onEachFeature: pop_PekerjaanPSU2024_6,
+            dataVar: 'json_PekerjaanPKP2025_7',
+            layerName: 'layer_PekerjaanPKP2025_7',
+            pane: 'pane_PekerjaanPKP2025_7',
+            onEachFeature: pop_PekerjaanPKP2025_7,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.shapeMarker(latlng, style_PekerjaanPSU2024_6_0(feature));
+                return L.marker(latlng, style_PekerjaanPKP2025_7_0(feature));
             },
         });
-        bounds_group.addLayer(layer_PekerjaanPSU2024_6);
-        map.addLayer(layer_PekerjaanPSU2024_6);
-        function pop_PekerjaanPSU2025_7(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">No SPK</th>\
-                        <td>' + (feature.properties['No SPK'] !== null ? autolinker.link(String(feature.properties['No SPK']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Nama Kegia</th>\
-                        <td>' + (feature.properties['Nama Kegia'] !== null ? autolinker.link(String(feature.properties['Nama Kegia']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Jenis</th>\
-                        <td>' + (feature.properties['Jenis'] !== null ? autolinker.link(String(feature.properties['Jenis']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Pekerjaan</th>\
-                        <td>' + (feature.properties['Pekerjaan'] !== null ? autolinker.link(String(feature.properties['Pekerjaan']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Dana</th>\
-                        <td>' + (feature.properties['Dana'] !== null ? autolinker.link(String(feature.properties['Dana']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Dusun</th>\
-                        <td>' + (feature.properties['Dusun'] !== null ? autolinker.link(String(feature.properties['Dusun']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Desa/Kelur</th>\
-                        <td>' + (feature.properties['Desa/Kelur'] !== null ? autolinker.link(String(feature.properties['Desa/Kelur']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Kecamatan</th>\
-                        <td>' + (feature.properties['Kecamatan'] !== null ? autolinker.link(String(feature.properties['Kecamatan']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Progress</th>\
-                        <td>' + (feature.properties['Progress'] !== null ? autolinker.link(String(feature.properties['Progress']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td class="visible-with-data" id="Sebelum" colspan="2"><strong>Sebelum</strong><br />' + (feature.properties['Sebelum'] !== null ? '<img src="images/' + String(feature.properties['Sebelum']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td class="visible-with-data" id="Sesudah" colspan="2"><strong>Sesudah</strong><br />' + (feature.properties['Sesudah'] !== null ? '<img src="images/' + String(feature.properties['Sesudah']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
-                    </tr>\
-                </table>';
-            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-			layer.on('popupopen', function(e) {
-				addClassToPopupIfMedia(content, e.popup);
-			});
-			layer.bindPopup(content, { maxHeight: 400 });
-        }
-
-        function style_PekerjaanPSU2025_7_0() {
-            return {
-                pane: 'pane_PekerjaanPSU2025_7',
-                shape: 'triangle',
-                radius: 4.0,
-                opacity: 1,
-                color: 'rgba(128,17,25,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 2.0,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(255,0,3,1.0)',
-                interactive: true,
-            }
-        }
-        map.createPane('pane_PekerjaanPSU2025_7');
-        map.getPane('pane_PekerjaanPSU2025_7').style.zIndex = 407;
-        map.getPane('pane_PekerjaanPSU2025_7').style['mix-blend-mode'] = 'normal';
-        var layer_PekerjaanPSU2025_7 = new L.geoJson(json_PekerjaanPSU2025_7, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_PekerjaanPSU2025_7',
-            layerName: 'layer_PekerjaanPSU2025_7',
-            pane: 'pane_PekerjaanPSU2025_7',
-            onEachFeature: pop_PekerjaanPSU2025_7,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.shapeMarker(latlng, style_PekerjaanPSU2025_7_0(feature));
-            },
-        });
-        var cluster_PekerjaanPSU2025_7 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+        var cluster_PekerjaanPKP2025_7 = new L.MarkerClusterGroup({showCoverageOnHover: false,
             spiderfyDistanceMultiplier: 2});
-        cluster_PekerjaanPSU2025_7.addLayer(layer_PekerjaanPSU2025_7);
+        cluster_PekerjaanPKP2025_7.addLayer(layer_PekerjaanPKP2025_7);
 
-        bounds_group.addLayer(layer_PekerjaanPSU2025_7);
-        cluster_PekerjaanPSU2025_7.addTo(map);
-        function pop_PekerjaanPermukiman2025_8(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">No SPK</th>\
-                        <td>' + (feature.properties['No SPK'] !== null ? autolinker.link(String(feature.properties['No SPK']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Nama Kegia</th>\
-                        <td>' + (feature.properties['Nama Kegia'] !== null ? autolinker.link(String(feature.properties['Nama Kegia']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Jenis</th>\
-                        <td>' + (feature.properties['Jenis'] !== null ? autolinker.link(String(feature.properties['Jenis']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Pekerjaan</th>\
-                        <td>' + (feature.properties['Pekerjaan'] !== null ? autolinker.link(String(feature.properties['Pekerjaan']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Dana</th>\
-                        <td>' + (feature.properties['Dana'] !== null ? autolinker.link(String(feature.properties['Dana']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Dusun</th>\
-                        <td>' + (feature.properties['Dusun'] !== null ? autolinker.link(String(feature.properties['Dusun']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Desa/Kelur</th>\
-                        <td>' + (feature.properties['Desa/Kelur'] !== null ? autolinker.link(String(feature.properties['Desa/Kelur']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Kecamatan</th>\
-                        <td>' + (feature.properties['Kecamatan'] !== null ? autolinker.link(String(feature.properties['Kecamatan']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Progress</th>\
-                        <td>' + (feature.properties['Progress'] !== null ? autolinker.link(String(feature.properties['Progress']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td class="visible-with-data" id="Sebelum" colspan="2"><strong>Sebelum</strong><br />' + (feature.properties['Sebelum'] !== null ? autolinker.link(String(feature.properties['Sebelum']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td class="visible-with-data" id="Sesudah" colspan="2"><strong>Sesudah</strong><br />' + (feature.properties['Sesudah'] !== null ? autolinker.link(String(feature.properties['Sesudah']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-			layer.on('popupopen', function(e) {
-				addClassToPopupIfMedia(content, e.popup);
-			});
-			layer.bindPopup(content, { maxHeight: 400 });
-        }
-
-        function style_PekerjaanPermukiman2025_8_0() {
-            return {
-                pane: 'pane_PekerjaanPermukiman2025_8',
-                radius: 4.0,
-                opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(255,0,3,1.0)',
-                interactive: true,
-            }
-        }
-        map.createPane('pane_PekerjaanPermukiman2025_8');
-        map.getPane('pane_PekerjaanPermukiman2025_8').style.zIndex = 408;
-        map.getPane('pane_PekerjaanPermukiman2025_8').style['mix-blend-mode'] = 'normal';
-        var layer_PekerjaanPermukiman2025_8 = new L.geoJson(json_PekerjaanPermukiman2025_8, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_PekerjaanPermukiman2025_8',
-            layerName: 'layer_PekerjaanPermukiman2025_8',
-            pane: 'pane_PekerjaanPermukiman2025_8',
-            onEachFeature: pop_PekerjaanPermukiman2025_8,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.circleMarker(latlng, style_PekerjaanPermukiman2025_8_0(feature));
-            },
-        });
-        var cluster_PekerjaanPermukiman2025_8 = new L.MarkerClusterGroup({showCoverageOnHover: false,
-            spiderfyDistanceMultiplier: 2});
-        cluster_PekerjaanPermukiman2025_8.addLayer(layer_PekerjaanPermukiman2025_8);
-
-        bounds_group.addLayer(layer_PekerjaanPermukiman2025_8);
-        cluster_PekerjaanPermukiman2025_8.addTo(map);
-        function pop_RencanaPekerjaanPermukiman2026_9(feature, layer) {
+        bounds_group.addLayer(layer_PekerjaanPKP2025_7);
+        cluster_PekerjaanPKP2025_7.addTo(map);
+        function pop_RencanaPekerjaanPKP2026_8(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">No Usulan</th>\
@@ -941,46 +860,42 @@ body {
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_RencanaPekerjaanPermukiman2026_9_0() {
+        function style_RencanaPekerjaanPKP2026_8_0() {
             return {
-                pane: 'pane_RencanaPekerjaanPermukiman2026_9',
-                radius: 4.0,
-                opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(0,255,53,1.0)',
+                pane: 'pane_RencanaPekerjaanPKP2026_8',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/RencanaPekerjaanPKP2026_8.svg',
+            iconSize: [15.2, 15.2]
+        }),
                 interactive: true,
             }
         }
-        map.createPane('pane_RencanaPekerjaanPermukiman2026_9');
-        map.getPane('pane_RencanaPekerjaanPermukiman2026_9').style.zIndex = 409;
-        map.getPane('pane_RencanaPekerjaanPermukiman2026_9').style['mix-blend-mode'] = 'normal';
-        var layer_RencanaPekerjaanPermukiman2026_9 = new L.geoJson(json_RencanaPekerjaanPermukiman2026_9, {
+        map.createPane('pane_RencanaPekerjaanPKP2026_8');
+        map.getPane('pane_RencanaPekerjaanPKP2026_8').style.zIndex = 408;
+        map.getPane('pane_RencanaPekerjaanPKP2026_8').style['mix-blend-mode'] = 'normal';
+        var layer_RencanaPekerjaanPKP2026_8 = new L.geoJson(json_RencanaPekerjaanPKP2026_8, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_RencanaPekerjaanPermukiman2026_9',
-            layerName: 'layer_RencanaPekerjaanPermukiman2026_9',
-            pane: 'pane_RencanaPekerjaanPermukiman2026_9',
-            onEachFeature: pop_RencanaPekerjaanPermukiman2026_9,
+            dataVar: 'json_RencanaPekerjaanPKP2026_8',
+            layerName: 'layer_RencanaPekerjaanPKP2026_8',
+            pane: 'pane_RencanaPekerjaanPKP2026_8',
+            onEachFeature: pop_RencanaPekerjaanPKP2026_8,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_RencanaPekerjaanPermukiman2026_9_0(feature));
+                return L.marker(latlng, style_RencanaPekerjaanPKP2026_8_0(feature));
             },
         });
-        var cluster_RencanaPekerjaanPermukiman2026_9 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+        var cluster_RencanaPekerjaanPKP2026_8 = new L.MarkerClusterGroup({showCoverageOnHover: false,
             spiderfyDistanceMultiplier: 2});
-        cluster_RencanaPekerjaanPermukiman2026_9.addLayer(layer_RencanaPekerjaanPermukiman2026_9);
+        cluster_RencanaPekerjaanPKP2026_8.addLayer(layer_RencanaPekerjaanPKP2026_8);
 
-        bounds_group.addLayer(layer_RencanaPekerjaanPermukiman2026_9);
-        cluster_RencanaPekerjaanPermukiman2026_9.addTo(map);
+        bounds_group.addLayer(layer_RencanaPekerjaanPKP2026_8);
+        cluster_RencanaPekerjaanPKP2026_8.addTo(map);
         const url = {"Nominatim OSM": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&",
         "France BAN": "https://api-adresse.data.gouv.fr/search/?"}
         var photonControl = L.control.photon({
@@ -1035,20 +950,20 @@ body {
             }
         });
         var overlaysTree = [
-        {label: '<b>Pekerjaan Fisik di Kawasan Kumuh</b>',  selectAllCheckbox: true, children: [
-            {label: '<img src="legend/RencanaPekerjaanPermukiman2026_9.png" /> Rencana Pekerjaan Permukiman 2026', layer: cluster_RencanaPekerjaanPermukiman2026_9},
-            {label: '<img src="legend/PekerjaanPermukiman2025_8.png" /> Pekerjaan Permukiman 2025', layer: cluster_PekerjaanPermukiman2025_8},
-            {label: '<img src="legend/PekerjaanPSU2025_7.png" /> Pekerjaan PSU 2025', layer: cluster_PekerjaanPSU2025_7},
-            {label: '<img src="legend/PekerjaanPSU2024_6.png" /> Pekerjaan PSU 2024', layer: layer_PekerjaanPSU2024_6},
-            {label: '<img src="legend/PekerjaanCiptaKarya2025_5.png" /> Pekerjaan Cipta Karya 2025', layer: layer_PekerjaanCiptaKarya2025_5},]},
-        {label: '<b>SK Kumuh</b>',  selectAllCheckbox: true, children: [
-            {label: '<img src="legend/SKKumuh2025_4.png" /> SK Kumuh 2025', layer: layer_SKKumuh2025_4},
-            {label: '<img src="legend/SKKumuh2020_3.png" /> SK Kumuh 2020', layer: layer_SKKumuh2020_3},]},
-        {label: '<b>Batas Wilayah</b>',  selectAllCheckbox: true, children: [
+        {label: '<b>Pekerjaan Fisik PKP</b>', collapsed: true, selectAllCheckbox: true, children: [
+            {label: '<img src="legend/RencanaPekerjaanPKP2026_8.png" /> Rencana Pekerjaan PKP 2026', layer: cluster_RencanaPekerjaanPKP2026_8},
+            {label: '<img src="legend/PekerjaanPKP2025_7.png" /> Pekerjaan PKP 2025', layer: cluster_PekerjaanPKP2025_7},
+            {label: '<img src="legend/PekerjaanPKP2024_6.png" /> Pekerjaan PKP 2024', layer: layer_PekerjaanPKP2024_6},]},
+        {label: '<b>SK Kumuh</b>', collapsed: true, selectAllCheckbox: true, children: [
+            {label: '<img src="legend/SKKumuh2025_5.png" /> SK Kumuh 2025', layer: layer_SKKumuh2025_5},
+            {label: '<img src="legend/SKKumuh2020_4.png" /> SK Kumuh 2020', layer: layer_SKKumuh2020_4},]},
+        {label: '<b>Pekerjaan Fisik Cipta Karya</b>', collapsed: true, selectAllCheckbox: true, children: [
+            {label: '<img src="legend/PekerjaanCiptaKarya2025_3.png" /> Pekerjaan Cipta Karya 2025', layer: layer_PekerjaanCiptaKarya2025_3},]},
+        {label: '<b>Batas Wilayah</b>', collapsed: true, selectAllCheckbox: true, children: [
             {label: '<img src="legend/BatasAdministrasiDesa_2.png" /> Batas Administrasi Desa', layer: layer_BatasAdministrasiDesa_2},
-            {label: 'Batas Administrasi Kecamatan<br /><table><tr><td style="text-align: center;"><img src="legend/BatasAdministrasiKecamatan_1_Kumuh0.png" /></td><td>Kumuh</td></tr><tr><td style="text-align: center;"><img src="legend/BatasAdministrasiKecamatan_1_TidakKumuh1.png" /></td><td>Tidak Kumuh</td></tr><tr><td style="text-align: center;"><img src="legend/BatasAdministrasiKecamatan_1_2.png" /></td><td></td></tr></table>', layer: layer_BatasAdministrasiKecamatan_1},]},
-        {label: '<b>Basemap</b>',  selectAllCheckbox: true, children: [
-            {label: "ESRI", layer: layer_ESRI_0},]},]
+            {label: 'Batas Administrasi Kecamatan<br /><table><tr><td style="text-align: center;"><img src="legend/BatasAdministrasiKecamatan_1_Kumuh0.png" /></td><td>Kumuh</td></tr><tr><td style="text-align: center;"><img src="legend/BatasAdministrasiKecamatan_1_TidakKumuh1.png" /></td><td>Tidak Kumuh</td></tr></table>', layer: layer_BatasAdministrasiKecamatan_1},]},
+        {label: '<b>Basemap</b>', collapsed: true, selectAllCheckbox: true, children: [
+            {label: "ESRI", layer: layer_ESRI_0, radioGroup: 'bm' },]},]
         var lay = L.control.layers.tree(null, overlaysTree,{
             //namedToggle: true,
             //selectorBack: false,
@@ -1144,5 +1059,41 @@ body {
             resetLabels([layer_BatasAdministrasiKecamatan_1]);
         });
         </script>        
-    </body>
+    
+<script>
+(function(){
+  const backdrop = document.getElementById('onload-modal');
+  if (!backdrop) return;
+  const dialog = backdrop.querySelector('.modal');
+  const closeBtn = document.getElementById('modal-close');
+  const closeBtn2 = document.getElementById('modal-close-secondary');
+
+  function openModal(){
+    backdrop.style.display = 'flex';
+    // move focus for accessibility
+    setTimeout(()=>dialog && dialog.focus(), 0);
+  }
+  function closeModal(){
+    backdrop.style.display = 'none';
+  }
+
+  // open on load
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', openModal);
+  } else {
+    openModal();
+  }
+
+  // close interactions
+  [closeBtn, closeBtn2].forEach(btn => btn && btn.addEventListener('click', closeModal));
+  backdrop.addEventListener('click', (e)=>{
+    if (e.target === backdrop) closeModal();
+  });
+  document.addEventListener('keydown', (e)=>{
+    if (e.key === 'Escape') closeModal();
+  });
+})();
+</script>
+
+</body>
 </html>
